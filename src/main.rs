@@ -25,7 +25,11 @@ fn main() {
     }
 
     println!("image.png is {}", elemax(net.evaluate(&image::get())));
-    println!("certainty: {:#?}", &net.evaluate(&image::get()));
+    let mut el = net.evaluate(&image::get()).into_iter().enumerate().collect::<Vec<(usize, f64)>>();
+    el.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap());
+    for (num, prob) in el.iter().rev() {
+        println!("{num}: {}%", (prob*10000.0) as usize as f64 / 100.0);
+    }
 
     if TRAIN {
         let (data_test, test_labels) = mnist::get_mnist_test();
