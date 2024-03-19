@@ -1,7 +1,9 @@
+use std::io::{Read, Write};
 use std::sync::{mpsc, Arc, RwLock};
 use std::thread::available_parallelism;
 
 use crossbeam::thread;
+use bincode;
 use random::Source;
 
 use crate::activations::Activation;
@@ -109,6 +111,16 @@ impl Network {
             prev = size;
         }
         x
+    }
+    pub fn from_file(path: &str) -> Self {
+        let mut reader = std::fs::File::open(path).unwrap();
+        let mut buf = vec![];
+        reader.read_to_end(&mut buf).unwrap();
+        bincode::deserialize(&buf).unwrap()
+    }
+    pub fn save_to_file(&self, path: &str) {
+        let mut writer = std::fs::File::create(path).unwrap();
+        writer.write_all(&bincode::serialize(self).unwrap()).unwrap();
     }
     pub fn evaluate(&self, inputs: &Vec<f64>) -> Vec<f64> {
         let mut prev = inputs.clone();

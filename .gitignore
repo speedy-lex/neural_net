@@ -3,4 +3,5 @@
 *.ppm
 *.png
 *.csv
+*.bin
 cargo.lock
