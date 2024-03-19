@@ -1,0 +1,6 @@
+/target
+*.json
+*.ppm
+*.png
+*.csv
+cargo.lock
